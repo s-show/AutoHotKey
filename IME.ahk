@@ -111,19 +111,19 @@
 ;  |　：　　|
 ;  ￣￣￣￣
 ;------------------------------------------------------------------
-_ImeIsConvertingTest:
-    _ImeTestClassCheck()
-return
-_ImeTestClassCheck()  {
-    MouseGetPos,,,hwnd
-    WinGetClass,Imeclass,ahk_id %hwnd%
-    Clipboard := Imeclass
+;_ImeIsConvertingTest:
+    ;_ImeTestClassCheck()
+;return
+;_ImeTestClassCheck()  {
+    ;MouseGetPos,,,hwnd
+    ;WinGetClass,Imeclass,ahk_id %hwnd%
+    ;Clipboard := Imeclass
     ;IME_GetConverting() 動作チェック & IME 入力窓/候補窓 Class名確認
-    MsgBox,% Imeclass "`n" IME_GetConverting()
-}
+    ;MsgBox,% Imeclass "`n" IME_GetConverting()
+;}
 ;--- 常駐テスト終了 [Shift]+[ESC] ---
-_ImeTestExt:
-ExitApp
+;_ImeTestExt:
+;ExitApp
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 
 ;---------------------------------------------------------------------------

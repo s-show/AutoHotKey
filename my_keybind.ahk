@@ -8,13 +8,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;Vimを使う上でのIME(日本語入力)の取り扱い with AutoHotKey 
 ;https://rcmdnk.com/blog/2013/08/04/computer-windows-autohotkey/
 
-; For Terminal/Vim
-;GroupAdd Terminal, ahk_class PuTTY
-;GroupAdd Terminal, ahk_class mintty ; cygwin
-;GroupAdd TerminalVim, ahk_group Terminal
-;GroupAdd TerminalVim, ahk_class Vim
-;GroupAdd Atom, ahk_exe atom.exe
-
 ; Include IME.hak
 ; IME.hak無しではIMEの状態は取得できない
 ; http://www6.atwiki.jp/eamat/pages/17.html
@@ -53,9 +46,6 @@ $^[:: ; Go to Normal mode (for vim) with IME off even at converting.
 
 ;_をShiftキー無しで入力する
 SC073::_
-;Space-D/UをCtrl-D/Uに変換する
-~Space & D::Send,^d
-~Space & U::Send,^u
 
 ;Chrome Ctrl-LでアドレスバーにフォーカスしたらIMEオフ
 #ifWinActive ahk_exe chrome.exe
@@ -78,7 +68,6 @@ $^L::
 ;テンキーのピリオド2連打でカンマ入力
 ;upを外してピリオドキーを押した時点でコードを実行するように設定すると、押しっぱなしでも`Input`以下のコードが実行され、カンマが連続で入力される。
 ~NumpadDot up::
-;~NumpadDot::
   ;Input, var_dot_press, I T0.1 V L1, {NumpadDot}
   Input, var_dot_press, I T0.2 L1, {NumpadDot}
   if(ErrorLevel == "EndKey:NumpadDot"){

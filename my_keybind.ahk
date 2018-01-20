@@ -110,3 +110,14 @@ else
     }
 }
 return
+
+~ScrollLock::
+  Input, var_dot_press, I T0.2 L1, {ScrollLock} 
+  if(ErrorLevel == "EndKey:ScrollLock"){
+    Run,notepad.exe
+  }
+  else
+  {
+    Send,%var_dot_press%
+  }
+Return

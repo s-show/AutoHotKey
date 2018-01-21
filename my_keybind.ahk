@@ -90,7 +90,7 @@ Return
   $^Space::
     if (IME_GET())
     {
-      Send,{vkF2sc070B}{vkF3sc029}
+      IME_SET(0)
       Send,^{Space}
       IME_SET(1)
     }
@@ -103,7 +103,7 @@ Return
   $+Space::
     if (IME_GET())
     {
-      Send,{vkF2sc070B}{vkF3sc029}
+      IME_SET(0)
       Send,+{Space}
       IME_SET(1)
     }
@@ -148,7 +148,9 @@ SC073::_
 ~vk1Dsc07B & g::
   InputBox, sword, Input Search Word , , ,300,110
   if ErrorLevel <> 0
-    {}
+  {
+    Return
+  }
   else
   {
     searchWord := RegExReplace(sword, "\s+", "+")

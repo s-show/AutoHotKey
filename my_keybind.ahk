@@ -12,36 +12,43 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ; IME.hak無しではIMEの状態は取得できない
 ; http://www6.atwiki.jp/eamat/pages/17.html
 #Include  %A_ScriptDir%/IME.ahk
-
 Return
 
 ; ESC + IME
 #ifWinActive ahk_exe atom.exe
-$Esc:: ; Just send Esc at converting.
-  if (IME_GET(1)) {
-    if (IME_GetConverting(A)) {
-      IME_SET(0)
-      Send,{Esc}
-    } else {
-      IME_SET(0)
-    }
-  } else {
-    IME_SET(0)
-    Send,{Esc}
-  }
+;ノーマルモードに戻ると同時にIMEをオフにする
+$Esc::
+$^[::
+  Gosub, GoToNormalMode
   Return
-$^[:: ; Go to Normal mode (for vim) with IME off even at converting.
-  if (IME_GET(1)) {
-    Send,{Esc}
-    ;Cliborのホットキーの指定時間500ミリ秒のため、600ミリ秒待つ
-    Sleep 10 ; wait 1 ms (Need to stop converting)
+
+GoToNormalMode:
+if (IME_GET()) {
+  ;IMEがONの場合
+  if (IME_GetConverting()) {
+    ;変換窓が出ている場合
+    Send,{Esc} ;変換窓を閉じる
+    Sleep, 10
+    Send,{Esc} ;未変換状態に戻す
+    Sleep, 10
+    Send,{Esc} ;入力中の文字列の行末にカーソルを移動
+    Sleep, 10
+    Send,{Esc} ;入力文字の全削除
     IME_SET(0)
-    Send,{Esc}
+    Send,{Esc} ;ノーマルモードに戻る
   } else {
+    ;変換窓が出ていない場合
+    Send,{Esc} ;入力文字の全削除 
     IME_SET(0)
-    Send,{Esc}
+    Send,{Esc} ;ノーマルモードに戻る
   }
-  Return
+} else { 
+  ;IMEがOffの場合
+  IME_SET(0)
+  Send,{Esc}
+}
+Return
+
 #ifWinActive
 
 ;Chrome Ctrl-LでアドレスバーにフォーカスしたらIMEオフ
@@ -91,26 +98,11 @@ if ErrorLevel <> 0
 else
 {
   searchWord := RegExReplace(sword, "\s+", "+")
-  IfWinActive, Google Chrome
-    {
-      ; Chromeが既に起動している場合
-      ;IfWinActiveで見つかったウィンドウがLastFoundWindowに格納されているので、WinActivateの引数は省略できる。
-      WinActivate 
-      Send,{^k} ;Ctrl-kで検索画面モードにする
-      clipboard = searchWord ;クリップボードに検索用語を格納する
-      Send,{^v} ;検索用語を貼り付けする
-      Send,{!Enter} ;Alt+Enterで検索結果を新しいタブで開く
-      Return
-    }
-  else
-    {
-      ; Chromeが起動していない場合
-      Run, "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" -new-tab "http://www.google.co.jp/search?hl=ja&lr=lang_ja&ie=UTF-8&q=%sword%"
-      Return
-    }
+  Run, "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" -new-tab "http://www.google.co.jp/search?hl=ja&lr=lang_ja&ie=UTF-8&q=%sword%"
 }
-return
+Return
 
+;ScrollLock２連打でメモ帳を起動
 ~ScrollLock::
   Input, var_dot_press, I T0.2 L1, {ScrollLock} 
   if(ErrorLevel == "EndKey:ScrollLock"){
@@ -121,3 +113,7 @@ return
     Send,%var_dot_press%
   }
 Return
+
+;Ctrl-Alt-Rでこのスクリプトを再読み込みする
+;https://autohotkey.com/docs/commands/Reload.htm 参照
+^!r::Reload

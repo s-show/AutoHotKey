@@ -64,6 +64,38 @@ $^L::
     IME_SET(0)
   }
   Return
+;/* Excel専用の設定 */
+#ifWinActive ahk_exe EXCEL.EXE
+  $^Space::
+    if (IME_GET())
+    {
+      Send,{vkF2sc070B}{vkF3sc029}
+      Send,^{Space}
+      IME_SET(1)
+    }
+    else
+    {
+      Send,^{Space}
+    }
+    Return
+    
+  $+Space::
+    if (IME_GET())
+    {
+      Send,{vkF2sc070B}{vkF3sc029}
+      Send,+{Space}
+      IME_SET(1)
+    }
+    else
+    {
+      Send,+{Space}
+    }
+    Return
+
+  ;F1キーでヘルプが開かないようにする
+  ;ヘルプを開くときはShift-F1で開く
+  $F1::Return
+  $+F1::SendInput, {F1}
 #ifWinActive
 
 ;_をShiftキー無しで入力する

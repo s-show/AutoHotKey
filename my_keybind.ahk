@@ -87,6 +87,7 @@ Return
 
 ;/* Excel専用の設定 */
 #ifWinActive ahk_exe EXCEL.EXE
+  ;IMEの状態に関係なくCtrl-Spaceで列選択する
   $^Space::
     if (IME_GET())
     {
@@ -100,6 +101,7 @@ Return
     }
     Return
     
+  ;IMEの状態に関係なくShift-Spaceで行選択する
   $+Space::
     if (IME_GET())
     {

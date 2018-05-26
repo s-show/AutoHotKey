@@ -121,6 +121,22 @@ Return
   $+F1::SendInput, {F1}
 #ifWinActive
 
+;/* Excel VBA編集画面専用の設定 */
+#ifWinActive ahk_class wndclass_desked_gsk
+  ;Ctrl-F5でマクロの実行をストップ
+  $^f5::
+    Send,!r
+    Sleep 100
+    Send,r
+  
+  ;F5でマクロを実行すると、実行前に上書き保存を行う。
+  $f5::
+    send,^s
+    Sleep 100
+    send, f5
+
+#ifWinActive
+
 ;/* Windows全体での設定 */
 ;_をShiftキー無しで入力する
 SC073::_

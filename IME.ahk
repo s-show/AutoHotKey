@@ -52,43 +52,44 @@
 
 */
 
+/*
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 ;
 ; 動作確認用 内部ルーチン (マウスカーソル位置のウィンドウのIME状態を見る)
 ;  単体起動時のテスト用なので削除しても問題なし
-;_ImeAutoExecuteSample:
-  ;Hotkey,#1,_ImeGetTest
-  ;Hotkey,#2,_ImeSetTest
-  ;Hotkey,#3,_ImeIsConvertingTest
-  ;Hotkey,+ESC,_ImeTestExt
-  ;SetTimer,_ImeInfoTimer,ON
-;return
+_ImeAutoExecuteSample:
+  Hotkey,#1,_ImeGetTest
+  Hotkey,#2,_ImeSetTest
+  Hotkey,#3,_ImeIsConvertingTest
+  Hotkey,+ESC,_ImeTestExt
+  SetTimer,_ImeInfoTimer,ON
+return
 ;
 ;;--- IME状態表示タイマ ---
-;_ImeInfoTimer:
-  ;Tooltip,% "IME_GET			: "     . IME_GET(_mhwnd())             . "`n"
-        ;.  "IME_GetConvMode		: " . IME_GetConvMode(_mhwnd())     . "`n"
-        ;.  "IME_GetSentenceMode	: " . IME_GetSentenceMode(_mhwnd()) . "`n"
-        ;.  "IME_GetConverting	: "     . IME_GetConverting(_mhwnd())
-;return
+_ImeInfoTimer:
+  Tooltip,% "IME_GET			: "     . IME_GET(_mhwnd())             . "`n"
+        .  "IME_GetConvMode		: " . IME_GetConvMode(_mhwnd())     . "`n"
+        .  "IME_GetSentenceMode	: " . IME_GetSentenceMode(_mhwnd()) . "`n"
+        .  "IME_GetConverting	: "     . IME_GetConverting(_mhwnd())
+return
 ;
 ;;--- IME Get Test [Win]+[1] ---
-;_ImeGetTest:
-  ;MsgBox,% "IME_GET			: "     . IME_GET(_mhwnd())             . "`n"
-        ;.  "IME_GetConvMode		: " . IME_GetConvMode(_mhwnd())     . "`n"
-        ;.  "IME_GetSentenceMode	: " . IME_GetSentenceMode(_mhwnd()) . "`n"
-;return
+_ImeGetTest:
+  MsgBox,% "IME_GET			: "     . IME_GET(_mhwnd())             . "`n"
+        .  "IME_GetConvMode		: " . IME_GetConvMode(_mhwnd())     . "`n"
+        .  "IME_GetSentenceMode	: " . IME_GetSentenceMode(_mhwnd()) . "`n"
+return
 ;;--- IME Get Test [Win]+[2] ---
-;_ImeSetTest:
-  ;MsgBox,% "IME_SET			: "     . IME_SET(1,_mhwnd())             . "`n"
-        ;.  "IME_SetConvMode		: " . IME_SetConvMode(0x08,_mhwnd())  . "`n"
-        ;.  "IME_SetSentenceMode	: " . IME_SetSentenceMode(1,_mhwnd()) . "`n"
-;return
+_ImeSetTest:
+  MsgBox,% "IME_SET			: "     . IME_SET(1,_mhwnd())             . "`n"
+        .  "IME_SetConvMode		: " . IME_SetConvMode(0x08,_mhwnd())  . "`n"
+        .  "IME_SetSentenceMode	: " . IME_SetSentenceMode(1,_mhwnd()) . "`n"
+return
 ;
-;_mhwnd(){	;background test
-;MouseGetPos,x,,hwnd
-;return "ahk_id " . hwnd
-;}
+_mhwnd(){	;background test
+MouseGetPos,x,,hwnd
+return "ahk_id " . hwnd
+}
 
 ;------------------------------------------------------------------
 ; IME窓のクラス名を調べるテストルーチン
@@ -111,20 +112,22 @@
 ;  |　：　　|
 ;  ￣￣￣￣
 ;------------------------------------------------------------------
-;_ImeIsConvertingTest:
-    ;_ImeTestClassCheck()
-;return
-;_ImeTestClassCheck()  {
-    ;MouseGetPos,,,hwnd
-    ;WinGetClass,Imeclass,ahk_id %hwnd%
-    ;Clipboard := Imeclass
-    ;IME_GetConverting() 動作チェック & IME 入力窓/候補窓 Class名確認
-    ;MsgBox,% Imeclass "`n" IME_GetConverting()
-;}
+_ImeIsConvertingTest:
+    _ImeTestClassCheck()
+return
+_ImeTestClassCheck()  {
+    MouseGetPos,,,hwnd
+    WinGetClass,Imeclass,ahk_id %hwnd%
+    Clipboard := Imeclass
+    IME_GetConverting() 動作チェック & IME 入力窓/候補窓 Class名確認
+    MsgBox,% Imeclass "`n" IME_GetConverting()
+}
 ;--- 常駐テスト終了 [Shift]+[ESC] ---
-;_ImeTestExt:
-;ExitApp
+_ImeTestExt:
+ExitApp
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+*/
+
 
 ;---------------------------------------------------------------------------
 ;  汎用関数 (多分どのIMEでもいけるはず)

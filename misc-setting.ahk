@@ -17,6 +17,7 @@ Pauseキーでアクティブウインドウの最前面固定を切り替え
 If (A_PriorHotKey == A_ThisHotKey and A_TimeSincePriorHotkey < 200)
 →前回と今回のホットキーが同じ かつ 前回のホットキーの入力から200ミリ秒以内
 この設定を行うと、テンキーのピリオドを押し続けても'.,'が入力された時点で入力が止まる
+IMEの状態に関係無く半角カンマ（,）を入力するため、UNICODEコードで指定している。
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 */
 ~NumpadDot::
@@ -30,47 +31,44 @@ If (A_PriorHotKey == A_ThisHotKey and A_TimeSincePriorHotkey < 200)
 /*
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 選択した文字列を'('等で囲む
-文字列を選択してから`無変換+s`を押し、続けて入力した文字で文字列を囲む
-「{,",`,#,%」はエスケープ(`)しないと望み通りの動作にならない
+文字列を選択→無変換+sを押す→続けて入力した文字で文字列を囲む
+「{,",`,#,%,*」はエスケープ(`)しないと望み通りの動作にならない
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 */
 ^,::
   backup = ClipboardAll
   Clipboard =
-  Send, ^x
+  Send, ^c	
   ClipWait, 1
   if ErrorLevel = 0
   {
-    Input, inputText, I L1 T1,{Esc}, (,[,`{,',",``,`%,-,_,`#
-    ;MsgBox, %Clipboard%
+    Input, inputText, I L1 T1,{Esc}, (,[,`{,',",``,`%,-,_,`#,`*, ,|
     If ErrorLevel = Match
     {
       If inputText = [
       {
-        Send,{[}
-        Send, ^v
-        Send,{]}
+        Send,{[}%Clipboard%{]}
         Sleep 200
       } 
       Else if inputText = (
       {
-        Send,{(}
-        Send, ^v
-        Send,{)}
+        Send,{(}%Clipboard%{)}
         Sleep 200
       }
       Else if inputText = {
       {
-        Send,{{}
-        Send, ^v
-        Send,{}}
+        Send,{{}%Clipboard%{}}
+        Sleep 200
+      }
+      ;スペースは`=`による条件判定ができないため、変数の型で判定している。
+      Else if inputText is space
+      {
+        Send,{Space}%Clipboard%{Space}
         Sleep 200
       }
       Else
       {
-        Send,{%inputText%}
-        Send, ^v
-        Send,{%inputText%}
+        Send,{%inputText%}%Clipboard%{%inputText%}
         Sleep 200
       }
     }
